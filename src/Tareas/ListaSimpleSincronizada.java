@@ -1,0 +1,72 @@
+package Tareas;
+
+import impresoras.Impresora;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+
+public class ListaSimpleSincronizada {
+
+    private LinkedList<Task> tareas;
+    private boolean allowReentry;
+
+    // Debatir si hacer una lista de Threads, y que cada impresora instanciada
+    // deba estar ahi. Posiblemente para el ultimo print me sirva, si hago un join con todos
+    // los hilos en ejecucion despues de bloquear el re-acceso.
+
+    public ListaSimpleSincronizada(){
+        tareas = new LinkedList<Task>();
+        allowReentry = true;
+    }
+
+
+    /**
+     * Simple metodo getter del allowReentry.
+     *
+     * @return  allowReentry
+     */
+    public boolean accessAllowed(){
+        return this.allowReentry;
+    }
+
+    /**
+     * Metodo usado para agregar una tarea de impresion al recurso compartido de trabajos pendientes.
+     * Nota: No existe metodo para pop-earlas manualmente. De eso se encargan los hilos Impresora.
+     *
+     * @param task  , la tarea de impresion a añadir.
+     */
+    public void addTask(Task task){
+        this.tareas.add(task);
+    }
+
+    /**
+     * Metodo sincronizado (Se usa a si mismo de lock) para devolver una tarea a una impresora.
+     *
+     * @param impresora , el hilo que esta usando el recurso.
+     * @return          'null', cuando la impresora no soporta los colores de la tarea,
+     *                  o la primera tarea que la impresora pueda manejar, elseway.
+     */
+    public synchronized Task retrieveTask(Impresora impresora) {
+        Iterator<Task> iterator = tareas.iterator();
+        while (iterator.hasNext()) {
+            Task task = iterator.next();
+            if (impresora.canHandle(task)) {
+                iterator.remove(); // remove the matching task safely
+                return task;
+            }
+        }
+        return null; // no match found
+    }
+
+    /**
+     * Metodo hecho para finalizar la busqueda de tareas.
+     * Por la ejecucion concurrente, los hilos van a completar sus tareas en ejecucion
+     * antes de finalizar el programa.
+     */
+    public void endProcessing(){
+        this.allowReentry = false;
+    }
+
+
+
+}
