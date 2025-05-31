@@ -4,6 +4,7 @@ import Tareas.ListaSimpleSincronizada;
 import Tareas.Task;
 
 import java.util.LinkedHashSet;
+import java.util.StringJoiner;
 
 import static java.lang.String.format;
 
@@ -24,11 +25,19 @@ public class Impresora extends Thread{
     final long SLEEP_TIME = 2000;
 
     // Constructor del hilo.
-    public Impresora(int indice, String modelo, ListaSimpleSincronizada taskQueue){
+    public Impresora(int indice, String modelo, ListaSimpleSincronizada taskQueue,
+                     String coloresCargados){
         this.colores = new LinkedHashSet<>();
         this.indice = indice;
         this.modelo = modelo;
         this.taskQueue = taskQueue;
+        for(char c : coloresCargados.toCharArray()){
+            Filamento f = Filamento.filamentoFromId(c);
+            if(f !=null){
+                colores.add(f);
+            }
+        }
+
     }
 
 
@@ -61,6 +70,22 @@ public class Impresora extends Thread{
     }
 
 
+    /**
+     * Método usado para devolver un string con los colores soportados por esta impresora.
+     *
+     * @return  Una cadena conjunta con todos los colores descriptos de la impresora.
+     */
+    public String availableColorsDescriptive(){
+        StringJoiner joiner = new StringJoiner(", ");
+        for(Filamento f:this.colores){
+            joiner.add(f.getColor());
+        }
+        return joiner.toString();
+    }
+
+
+    /*
+
     // Metodo para
     public void loadColor(Filamento cargable){
         if(!colores.contains(cargable)){
@@ -84,7 +109,7 @@ public class Impresora extends Thread{
         colores.clear();
     }
 
-
+    */
     /**
      * Metodo para expresar en una cadena las caracteristicas de esta impresora.
      *
