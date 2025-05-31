@@ -3,7 +3,7 @@ package impresoras;
 import Tareas.ListaSimpleSincronizada;
 import Tareas.Task;
 
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
 import static java.lang.String.format;
 
@@ -16,7 +16,7 @@ import static java.lang.String.format;
  */
 public class Impresora extends Thread{
 
-    private ArrayList<Filamento> colores;
+    private LinkedHashSet<Filamento> colores;
     private final int indice;
     private final String modelo;
     ListaSimpleSincronizada taskQueue;
@@ -25,6 +25,7 @@ public class Impresora extends Thread{
 
     // Constructor del hilo.
     public Impresora(int indice, String modelo, ListaSimpleSincronizada taskQueue){
+        this.colores = new LinkedHashSet<>();
         this.indice = indice;
         this.modelo = modelo;
         this.taskQueue = taskQueue;
@@ -56,7 +57,7 @@ public class Impresora extends Thread{
 
 
     public boolean canHandle(Task tarea){
-        return true; // IMPLEMENTAR LOGICA DESPUES
+        return false; // IMPLEMENTAR LOGICA DESPUES
     }
 
 
