@@ -3,11 +3,13 @@ package Tareas;
 import impresoras.Impresora;
 
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class ListaSimpleSincronizada {
 
-    private LinkedList<Task> tareas;
+    private Set<Task> tareas = new LinkedHashSet<>();
+
     private boolean allowReentry;
 
     // Debatir si hacer una lista de Threads, y que cada impresora instanciada
@@ -15,7 +17,7 @@ public class ListaSimpleSincronizada {
     // los hilos en ejecucion despues de bloquear el re-acceso.
 
     public ListaSimpleSincronizada(){
-        tareas = new LinkedList<Task>();
+        tareas = new LinkedHashSet<Task>();
         allowReentry = true;
     }
 
@@ -51,11 +53,11 @@ public class ListaSimpleSincronizada {
         while (iterator.hasNext()) {
             Task task = iterator.next();
             if (impresora.canHandle(task)) {
-                iterator.remove(); // remove the matching task safely
+                iterator.remove();
                 return task;
             }
         }
-        return null; // no match found
+        return null; // Si no hay tareas coincidentes, se retorna null.
     }
 
     /**
