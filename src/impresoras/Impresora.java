@@ -31,6 +31,7 @@ public class Impresora extends Thread{
         this.indice = indice;
         this.modelo = modelo;
         this.taskQueue = taskQueue;
+        this.setName(format("[Impresora %d]", indice)); //  Asigno nombre al hilo
         for(char c : coloresCargados.toCharArray()){
             Filamento f = Filamento.filamentoFromId(c);
             if(f !=null){
@@ -40,17 +41,21 @@ public class Impresora extends Thread{
 
     }
 
-
     @Override
     public void run(){
         while(taskQueue.accessAllowed()) {
             Task currentTask = taskQueue.retrieveTask(this);
             if(currentTask!=null){
-                // Logica de manejo de las task.
-                // Posiblemente, llamar a un metodo 'currentTask.execute()'.
+                if(canHandle(currentTask)){
+                    // Logica de manejo de las task.
+                    // Posiblemente, llamar a un metodo 'currentTask.execute()'.
+                }
+                else{
+                    // Informar que aca la impresora no pudo manejarlo.
+                }
             }
             else{
-                System.out.println("No available tasks for this printer. Sleep.");
+                System.out.println(this.toString() +"\t\t:No available tasks. Sleep " + SLEEP_TIME);
                 try{
                     sleep(SLEEP_TIME);
                 } catch (InterruptedException e) {
@@ -60,18 +65,24 @@ public class Impresora extends Thread{
                 }
             }
         }
-        System.out.println(this.toString() + ": Ejecucion finalizada."); // Add formteo de cadena.
-    }
-
-
-
-    public boolean canHandle(Task tarea){
-        return false; // IMPLEMENTAR LOGICA DESPUES
+        System.out.println(this.toString() + "\t\t: Ejecucion finalizada."); // Add formteo de cadena.
     }
 
 
     /**
-     * Método usado para devolver un string con los colores soportados por esta impresora.
+     * Metodo para verificar si la impresora tiene los colores para resolver la tarea.
+     *
+     * @param tarea , una instancia de Task a resolver.
+     * @return      'true', si todos los colores de la task estan en los de impresora,
+     *              'false' otherwise.
+     */
+    private boolean canHandle(Task tarea){
+        return this.colores.containsAll(tarea.coloresDeImpresion());
+    }
+
+
+    /**
+     * Méto-do usado para devolver un string con los colores soportados por esta impresora.
      *
      * @return  Una cadena conjunta con todos los colores descriptos de la impresora.
      */
@@ -117,7 +128,8 @@ public class Impresora extends Thread{
      */
     @Override
     public String toString(){
-        return format("Impresora %s (%s)",this.indice, this.modelo);
+        return format("Impresora %s (%s)",
+                this.indice, this.modelo);
     }
 
 
