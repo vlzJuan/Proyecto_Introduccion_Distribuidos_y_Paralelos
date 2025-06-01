@@ -4,12 +4,11 @@ import impresoras.Impresora;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.Set;
+
 
 public class ListaSimpleSincronizada {
 
-    private Set<Task> tareas = new LinkedHashSet<>();
-
+    private final LinkedHashSet<Task> tareas;
     private boolean allowReentry;
 
     // Debatir si hacer una lista de Threads, y que cada impresora instanciada
@@ -17,7 +16,7 @@ public class ListaSimpleSincronizada {
     // los hilos en ejecucion despues de bloquear el re-acceso.
 
     public ListaSimpleSincronizada(){
-        tareas = new LinkedHashSet<Task>();
+        tareas = new LinkedHashSet<>();
         allowReentry = true;
     }
 
@@ -41,6 +40,11 @@ public class ListaSimpleSincronizada {
         this.tareas.add(task);
     }
 
+
+    public LinkedHashSet<Task> tareasEnLista(){
+        return this.tareas;
+    }
+
     /**
      * Metodo sincronizado (Se usa a si mismo de lock) para devolver una tarea a una impresora.
      *
@@ -53,6 +57,8 @@ public class ListaSimpleSincronizada {
         while (iterator.hasNext()) {
             Task task = iterator.next();
             if (impresora.canHandle(task)) {
+                System.out.printf("[Control thread]: %s tomo la tarea '%s'\n",
+                        impresora, task);
                 iterator.remove();
                 return task;
             }
@@ -68,7 +74,5 @@ public class ListaSimpleSincronizada {
     public void endProcessing(){
         this.allowReentry = false;
     }
-
-
 
 }
