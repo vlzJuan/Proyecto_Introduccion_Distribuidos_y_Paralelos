@@ -17,14 +17,21 @@ import static java.lang.String.format;
  */
 public class Impresora extends Thread{
 
-    private LinkedHashSet<Filamento> colores;
+    private final LinkedHashSet<Filamento> colores;
     private final int indice;
     private final String modelo;
     ListaSimpleSincronizada taskQueue;
 
-    final long SLEEP_TIME = 2000;
+    final long SLEEP_TIME = 2000;   //  Constante para el tiempo de espera entre intentos.
 
-    // Constructor del hilo.
+    /**
+     * Constructor de un hilo de impresora.
+     *
+     * @param indice            , el numero de impresora instanciada
+     * @param modelo            , el modelo de la impresora utilizada
+     * @param taskQueue         , la lista de tareas sincronizadas
+     * @param coloresCargados   , los colores cargados a la impresora.
+     */
     public Impresora(int indice, String modelo, ListaSimpleSincronizada taskQueue,
                      String coloresCargados){
         this.colores = new LinkedHashSet<>();
@@ -38,7 +45,6 @@ public class Impresora extends Thread{
                 colores.add(f);
             }
         }
-
     }
 
     @Override
@@ -46,16 +52,11 @@ public class Impresora extends Thread{
         while(taskQueue.accessAllowed()) {
             Task currentTask = taskQueue.retrieveTask(this);
             if(currentTask!=null){
-                if(canHandle(currentTask)){
-                    // Logica de manejo de las task.
-                    // Posiblemente, llamar a un metodo 'currentTask.execute()'.
-                }
-                else{
-                    // Informar que aca la impresora no pudo manejarlo.
-                }
+                // Se elimino la verificacion explicita aqui, ya que de eso se encarga
+                // la taskqueue
+                currentTask.execute();
             }
             else{
-                System.out.println(this.toString() +"\t\t:No available tasks. Sleep " + SLEEP_TIME);
                 try{
                     sleep(SLEEP_TIME);
                 } catch (InterruptedException e) {
@@ -65,7 +66,7 @@ public class Impresora extends Thread{
                 }
             }
         }
-        System.out.println(this.toString() + "\t\t: Ejecucion finalizada."); // Add formteo de cadena.
+        System.out.println(this + "\t\t: Ejecucion finalizada."); // Add formteo de cadena.
     }
 
 
@@ -93,7 +94,6 @@ public class Impresora extends Thread{
         }
         return joiner.toString();
     }
-
 
     /*
 
@@ -131,7 +131,4 @@ public class Impresora extends Thread{
         return format("Impresora %s (%s)",
                 this.indice, this.modelo);
     }
-
-
-
 }
