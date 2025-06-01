@@ -1,6 +1,6 @@
 package impresoras;
 
-import Tareas.ListaSimpleSincronizada;
+import Tareas.TaskQueueSincronizada;
 import Tareas.Task;
 
 import java.util.LinkedHashSet;
@@ -20,7 +20,7 @@ public class Impresora extends Thread{
     private final LinkedHashSet<Filamento> colores;
     private final int indice;
     private final String modelo;
-    ListaSimpleSincronizada taskQueue;
+    TaskQueueSincronizada taskQueue;
 
     final long SLEEP_TIME = 2000;   //  Constante para el tiempo de espera entre intentos.
 
@@ -32,7 +32,7 @@ public class Impresora extends Thread{
      * @param taskQueue         , la lista de tareas sincronizadas
      * @param coloresCargados   , los colores cargados a la impresora.
      */
-    public Impresora(int indice, String modelo, ListaSimpleSincronizada taskQueue,
+    public Impresora(int indice, String modelo, TaskQueueSincronizada taskQueue,
                      String coloresCargados){
         this.colores = new LinkedHashSet<>();
         this.indice = indice;

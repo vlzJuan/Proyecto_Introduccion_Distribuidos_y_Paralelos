@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 
-public class ListaSimpleSincronizada {
+public class TaskQueueSincronizada {
 
     private final LinkedHashSet<Task> tareas;
     private boolean allowReentry;
@@ -15,7 +15,7 @@ public class ListaSimpleSincronizada {
     // deba estar ahi. Posiblemente para el ultimo print me sirva, si hago un join con todos
     // los hilos en ejecucion despues de bloquear el re-acceso.
 
-    public ListaSimpleSincronizada(){
+    public TaskQueueSincronizada(){
         tareas = new LinkedHashSet<>();
         allowReentry = true;
     }

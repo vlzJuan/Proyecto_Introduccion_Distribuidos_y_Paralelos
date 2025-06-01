@@ -1,4 +1,4 @@
-import Tareas.ListaSimpleSincronizada;
+import Tareas.TaskQueueSincronizada;
 import Tareas.Task;
 import impresoras.Impresora;
 
@@ -8,14 +8,14 @@ public class Main {
 
 
     public static ArrayList<Impresora> hilos;
-    public static ListaSimpleSincronizada tareas;
+    public static TaskQueueSincronizada tareas;
 
 
     public static void main(String[] args) {
 
         // Declaro un array para seguir los hilos, y las tareas
         hilos = new ArrayList<>();
-        tareas = new ListaSimpleSincronizada();
+        tareas = new TaskQueueSincronizada();
 
 
         // Declaro impresoras
