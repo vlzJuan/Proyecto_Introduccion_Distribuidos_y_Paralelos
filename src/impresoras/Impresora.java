@@ -76,7 +76,7 @@ public class Impresora extends Thread{
      * @return      'true', si todos los colores de la task estan en los de impresora,
      *              'false' otherwise.
      */
-    private boolean canHandle(Task tarea){
+    public boolean canHandle(Task tarea){
         return this.colores.containsAll(tarea.coloresDeImpresion());
     }
 
