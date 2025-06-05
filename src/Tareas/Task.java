@@ -13,6 +13,12 @@ public class Task {
     @SuppressWarnings("FieldCanBeLocal")
     private final long PRINT_INTERVAL = 1000;
 
+    /**
+     * Clase que simula una tarea de impresion a realizar
+     * @param nombre        , el nombre del trabajo de impresion
+     * @param taskTime      , la duracion del trabajo de impresion
+     * @param colorString   , una cadena con las siglas de los colores necesarios.
+     */
     public Task(String nombre, long taskTime, String colorString){
         this.taskName = nombre;
         this.timeToCompletion = taskTime;
