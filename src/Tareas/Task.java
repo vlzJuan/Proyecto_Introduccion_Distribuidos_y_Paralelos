@@ -31,12 +31,9 @@ public class Task {
         }
     }
 
-
-
     public void execute(){
 
         String threadName = Thread.currentThread().getName();
-
 
         //  Sector de simulacion de comportamiento de la tarea
         long timeElapsedInSeconds   = timeToCompletion/PRINT_INTERVAL;  // Cantidad de segundos que tarda
@@ -44,28 +41,22 @@ public class Task {
         try{
             for(int i=0; i<timeElapsedInSeconds; i++){
                 Thread.sleep(PRINT_INTERVAL);
-                System.out.printf("%s: Procesando %s\tTime elapsed: %d segundos.\n",
-                        threadName, this, i);
+                //System.out.printf("%s: Procesando %s\tTime elapsed: %d segundos.\n", threadName, this, i);
             }
             Thread.sleep(restoDeDivision);
-            System.out.printf("%s: Tarea finalizada (%s)!\n",
-                    threadName, this);
+            //System.out.printf("%s: Tarea finalizada (%s)!\n", threadName, this);
         }
         catch(InterruptedException e){
             System.out.printf("%s:Ejecucion interrumpida.\n", threadName);
         }
         // Fin de simulacion de impresion de tarea.
 
-
     }
-
-
 
 
     public LinkedHashSet<Filamento> coloresDeImpresion(){
         return this.colores;
     }
-
 
     private String formattedTime(){
 
