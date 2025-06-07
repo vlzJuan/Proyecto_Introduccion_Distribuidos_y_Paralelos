@@ -2,6 +2,7 @@ package impresoras;
 
 import Tareas.TaskQueueSincronizada;
 import Tareas.Task;
+import logger.Logger;
 
 import java.util.LinkedHashSet;
 import java.util.StringJoiner;
@@ -20,6 +21,7 @@ public class Impresora extends Thread{
     private final LinkedHashSet<Filamento> colores;
     private final int indice;
     private final String modelo;
+    private final Logger logger;
     TaskQueueSincronizada taskQueue;
 
     final long SLEEP_TIME = 2000;   //  Constante para el tiempo de espera entre intentos.
@@ -33,11 +35,12 @@ public class Impresora extends Thread{
      * @param coloresCargados   , los colores cargados a la impresora.
      */
     public Impresora(int indice, String modelo, TaskQueueSincronizada taskQueue,
-                     String coloresCargados){
+                     String coloresCargados, Logger logger){
         this.colores = new LinkedHashSet<>();
         this.indice = indice;
         this.modelo = modelo;
         this.taskQueue = taskQueue;
+        this.logger = logger;
         this.setName(format("[Impresora %d]", indice)); //  Asigno nombre al hilo
         for(char c : coloresCargados.toCharArray()){
             Filamento f = Filamento.filamentoFromId(c);
@@ -52,9 +55,11 @@ public class Impresora extends Thread{
         while(taskQueue.accessAllowed()) {
             Task currentTask = taskQueue.retrieveTask(this);
             if(currentTask!=null){
+                logger.log(this + " recibió la tarea " + currentTask);
                 // Se elimino la verificacion explicita aqui, ya que de eso se encarga
                 // la taskqueue
                 currentTask.execute();
+                logger.log(this + " finalizo la tarea " + currentTask);
             }
             else{
                 try{
@@ -66,7 +71,8 @@ public class Impresora extends Thread{
                 }
             }
         }
-        System.out.println(this + "\t\t: Ejecucion finalizada."); // Add formteo de cadena.
+        logger.log(this + "\t\t: Ejecucion finalizada.");
+        //System.out.println(this + "\t\t: Ejecucion finalizada."); // Add formteo de cadena.
     }
 
 
@@ -95,32 +101,7 @@ public class Impresora extends Thread{
         return joiner.toString();
     }
 
-    /*
 
-    // Metodo para
-    public void loadColor(Filamento cargable){
-        if(!colores.contains(cargable)){
-            colores.add(cargable);
-            // Notificar que se cargo correctamente.
-        }
-        else{
-            // Notificar que ya estaba adentro
-        }
-    }
-
-
-    // Metodo usado para quitar uno de los colores de la impresora
-    public void unloadColor(Filamento retirable){
-        // AGREGAR LOGICA ACA.
-    }
-
-
-    // Metodo usado para quitar TODOS los filamentos de una impresora
-    public void unloadAll(){
-        colores.clear();
-    }
-
-    */
     /**
      * Metodo para expresar en una cadena las caracteristicas de esta impresora.
      *
