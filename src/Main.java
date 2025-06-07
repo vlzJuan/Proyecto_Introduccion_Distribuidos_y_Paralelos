@@ -1,6 +1,7 @@
 import Tareas.TaskQueueSincronizada;
 import Tareas.Task;
 import impresoras.Impresora;
+import logger.Logger;
 
 import java.util.ArrayList;
 
@@ -9,20 +10,22 @@ public class Main {
 
     public static ArrayList<Impresora> hilos;
     public static TaskQueueSincronizada tareas;
-
+    public static Logger consolePrinter;
 
     public static void main(String[] args) {
 
         // Declaro un array para seguir los hilos, y las tareas
         hilos = new ArrayList<>();
         tareas = new TaskQueueSincronizada();
-
+        consolePrinter = new Logger();
 
         // Declaro impresoras
         for(int i=0; i<3; i++){
-            hilos.add(new Impresora(i, "Anycubic Kobra 3", tareas, "BN"));
+            hilos.add(new Impresora(i, "Anycubic Kobra 3", tareas,
+                    "BN", consolePrinter));
         }
-        hilos.add(new Impresora(3, "Creality Hi Combo", tareas, "RVA"));
+        hilos.add(new Impresora(3, "Creality Hi Combo", tareas,
+                "RVA", consolePrinter));
 
         // Inicio los hilos
         for(Impresora imp : hilos){
