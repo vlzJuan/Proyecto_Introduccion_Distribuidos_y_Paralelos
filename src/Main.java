@@ -1,5 +1,5 @@
-import Tareas.TaskQueueSincronizada;
-import Tareas.Task;
+import tareas.TaskQueueSincronizada;
+import tareas.Task;
 import impresoras.Impresora;
 import logger.Logger;
 

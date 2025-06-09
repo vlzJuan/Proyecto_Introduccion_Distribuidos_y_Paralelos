@@ -1,4 +1,4 @@
-package Tareas;
+package tareas;
 
 import impresoras.Filamento;
 

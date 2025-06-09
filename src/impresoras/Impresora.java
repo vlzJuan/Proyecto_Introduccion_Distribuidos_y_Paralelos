@@ -1,7 +1,8 @@
 package impresoras;
 
-import Tareas.TaskQueueSincronizada;
-import Tareas.Task;
+import logger.Listener;
+import tareas.TaskQueueSincronizada;
+import tareas.Task;
 import logger.Logger;
 
 import java.util.LinkedHashSet;
@@ -21,7 +22,7 @@ public class Impresora extends Thread{
     private final LinkedHashSet<Filamento> colores;
     private final int indice;
     private final String modelo;
-    private final Logger logger;
+    private final Listener logger;
     TaskQueueSincronizada taskQueue;
 
     final long SLEEP_TIME = 2000;   //  Constante para el tiempo de espera entre intentos.
