@@ -104,6 +104,19 @@ public class Impresora extends Thread{
 
 
     /**
+     * Méto-do usado para devolver un string con los colores soportados por esta impresora.
+     *
+     * @return  Una cadena conjunta con todos los caracteres de los colores de la impresora.
+     */
+    public String availableColorsIds() {
+        StringJoiner joiner = new StringJoiner(", ");
+        for (Filamento f : this.colores) {
+            joiner.add(Character.toString(f.getId())); // convert char to String
+        }
+        return joiner.toString();
+    }
+
+    /**
      * Metodo para expresar en una cadena las caracteristicas de esta impresora.
      *
      * @return una cadena descriptiva formateada.
